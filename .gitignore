@@ -1,0 +1,7 @@
+data/
+*.part
+__pycache__/
+*.py[cod]
+reports/*.csv
+.vscode/
+.idea/
