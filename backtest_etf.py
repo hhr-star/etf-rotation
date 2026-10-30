@@ -20,7 +20,8 @@ def month_ends(dates):
     return list(s.groupby([s.index.year, s.index.month]).last().sort_values())
 
 
-def run(panel, mom_window=None, top_k=None, vol_adjust=None, cash_neg=None):
+def run(panel, mom_window=None, top_k=None, vol_adjust=None, cash_neg=None,
+        rebalance_months=None):
     mom_window = mom_window or C.MOM_WINDOW
     top_k = top_k or C.TOP_K
     vol_adjust = C.USE_VOL_ADJUST if vol_adjust is None else vol_adjust
@@ -36,6 +37,8 @@ def run(panel, mom_window=None, top_k=None, vol_adjust=None, cash_neg=None):
     score = (mom / vol.replace(0, np.nan)) if vol_adjust else mom
 
     mends = month_ends(dates)
+    if rebalance_months:
+        mends = [d for d in mends if d.month in rebalance_months]
     nav, weights = 1.0, pd.Series(dtype=float)
     rows, trades = [], []
 
